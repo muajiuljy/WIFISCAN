@@ -1,8 +1,10 @@
 /*this program is just for testing*/
 #include "wave.h"
+#include "comm.h"
 #include <stdio.h>
 #include <math.h> 
 #include "screen.h"
+
 void testTone(int freq, double d){
 	FILE *fp;
 	int i;
@@ -71,21 +73,47 @@ void fillID(const char *s, char d[]){
 //function displayWAVdata calculates 1-sec sample into 60 pieces
 //of RMS values,each RMS value is calculated from 16000/80=200
 //pieces of samples.See wikipedia page for "Root Mean Square"
-
+//However,only 8 pieces of RMS data are sent to the server as Fast Mode
+//of Sound Level Meter (SLM)
 void displayWAVdata(short int d[]){
 	int i, j;
-	double sum200, rms200;
+	//following variables are used to calculate RMS200
+	double sum200, rms200,max200 = 0.0, min200=20000.0;
+	double Leqf[8], sum2000 = 0.0;
+	
 	for(i=0; i<80; ++i){
 		sum200 = 0.0;   //initialize the accumulator
 		for(j=0; j<SAMPLE_RATE/80; ++j){
 			sum200 += (*d)*(*d);
 			d++;       //treat d as a pointer,pointer increment
 		}
+		sum2000 += sum200;
+		if(i%10!=9){   //for every 10 pieces of rms200,we get a rms2000
+			Leqf[i/10] = sqrt(sum2000/SAMPLE_RATE/8);
+			sum2000 = 0.0;  //reset sum2000
+		}
+		
 		rms200 = sqrt(sum200/(SAMPLE_RATE/80));
+		//please find maximum and minimum value of rms200
+		rms200 = 20*log10(rms200);
+		//find decibel value of sound using logrithm
+		if(rms200<min200) min200=rms200;
+		if(rms200>max200) max200=rms200;
 #ifdef DEBUG     //conditional compiling
 		printf("%d %10.2f ", i, rms200);
 #else
-		displayBar(rms200,i+1);
+		displayBar(rms200,i+1); 	
 #endif
 	}
+	//display max200 and min200 in debug mode
+#ifdef DEBUG
+	printf("\nmin = %.2f,max = %.2f\n",min200,max200);
+//	gotoXY(10,30); setFGcolor(YELLOW);
+//	printf("HEllO\n");
+#endif
+
+//#ifdef COMM //only in the case COMM is defined,send data to server
+	send_data_curl(Leqf);
+//#endif
+
 }

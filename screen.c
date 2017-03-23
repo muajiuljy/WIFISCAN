@@ -23,12 +23,12 @@ void clearScreen(void){
 
 void displayBar(double rms, int col){
 	int i;
-	for(i=0; i<rms/100; i++){
-		gotoXY(28-i,col);   //start displaying the bar from 2nd row and go down
+	for(i=0; i<rms/3; i++){
+		gotoXY(40-i,col);   //start displaying the bar from 2nd row and go down
 #ifndef UNICODE
-	printf("*");
+		printf("*");
 #else
-	printf("%s",BAR);
+		printf("%s",BAR);
 #endif
 	}
 	fflush(stdout);
