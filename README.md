@@ -15,9 +15,9 @@ It is recommonded to have Ethernet connection for your Pi.
 1.2 Softwave configuration
 
 The USB sound card has to be set as default audio device.To do so,you need
-to modify two files with following contents.
-......
+to modify two files which are asound.conf in etc folder and .asoundrc file.
+ You put the following content. pcm.!default { type plug slave { pcm "hw:1,0" } } ctl.!default{ type hw card 1 }
 
 If you are using Raspbian Jessie, you have to roll back alsa-utils to an
 early version.
-.....
+
