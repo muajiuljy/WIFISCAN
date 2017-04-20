@@ -112,8 +112,8 @@ void displayWAVdata(short int d[]){
 //	printf("HEllO\n");
 #endif
 
-//#ifdef COMM //only in the case COMM is defined,send data to server
+#ifdef COMM //only in the case COMM is defined,send data to server
 	send_data_curl(Leqf);
-//#endif
+#endif
 
 }
