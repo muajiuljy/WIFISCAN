@@ -33,5 +33,4 @@ void send_data_curl(double Leq[]){
                 curl_easy_cleanup(curl);   //clean up handler
         }
         curl_global_cleanup();    //globally ending curl
-	printf("Data sent\n");
 }
