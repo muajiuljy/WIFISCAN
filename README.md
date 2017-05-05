@@ -1,3 +1,5 @@
+https://github.com/muajiuljy/APPDEV
+
 # This is my readme file
 Raspberry Pi acoustic sensor project
 
@@ -21,3 +23,4 @@ to modify two files which are asound.conf in etc folder and .asoundrc file.
 If you are using Raspbian Jessie, you have to roll back alsa-utils to an
 early version.
 
+# WIFISCAN
